@@ -13,9 +13,9 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: gamesa-sample
-  values:
-    imagePullSecrets:
-      - name: gamesa-sample-csc-docker-readonly
+  # values:
+  #   imagePullSecrets:
+  #     - name: gamesa-sample-csc-docker-readonly
   interval: 5m
   install:
     remediation:

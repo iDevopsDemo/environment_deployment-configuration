@@ -17,7 +17,7 @@ spec:
   postBuild:
     substitute:
       cluster_domain: ${cluster_domain}
-      helm_repo: https://code.siemens.com/api/v4/projects/502963/packages/helm/prod
+      helm_repo: oci://ghcr.io/idevopsdemo/charts/release
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -37,7 +37,7 @@ spec:
   postBuild:
     substitute:
       cluster_domain: ${cluster_domain}
-      helm_repo: https://code.siemens.com/api/v4/projects/502963/packages/helm/rc
+      helm_repo: oci://ghcr.io/idevopsdemo/charts/prerelease
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -57,4 +57,4 @@ spec:
   postBuild:
     substitute:
       cluster_domain: ${cluster_domain}
-      helm_repo: https://code.siemens.com/api/v4/projects/502963/packages/helm/devel
+      helm_repo: oci://ghcr.io/idevopsdemo/charts/testing

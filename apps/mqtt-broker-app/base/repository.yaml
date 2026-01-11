@@ -3,10 +3,11 @@ kind: HelmRepository
 metadata:
   name: gamesa-sample
 spec:
+  type: oci
   interval: 1m
   url: ${helm_repo}
-  secretRef:
-    name: gamesa-sample-csc-helm-readonly
+  # secretRef:
+  #   name: gamesa-sample-csc-helm-readonly
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
