@@ -1,0 +1,60 @@
+#Showcase how to use CSC
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: mqtt-broker-app-production
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  sourceRef:
+    kind: GitRepository
+    name: ${git_repo_name}
+    namespace: flux-system
+  path: ./apps/mqtt-broker-app/production
+  prune: true
+  wait: true
+  timeout: 2m
+  postBuild:
+    substitute:
+      cluster_domain: ${cluster_domain}
+      helm_repo: https://code.siemens.com/api/v4/projects/502963/packages/helm/prod
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: mqtt-broker-app-staging
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  sourceRef:
+    kind: GitRepository
+    name: ${git_repo_name}
+    namespace: flux-system
+  path: ./apps/mqtt-broker-app/staging
+  prune: true
+  wait: true
+  timeout: 2m
+  postBuild:
+    substitute:
+      cluster_domain: ${cluster_domain}
+      helm_repo: https://code.siemens.com/api/v4/projects/502963/packages/helm/rc
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: mqtt-broker-app-testing
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  sourceRef:
+    kind: GitRepository
+    name: ${git_repo_name}
+    namespace: flux-system
+  path: ./apps/mqtt-broker-app/testing
+  prune: true
+  wait: true
+  timeout: 2m
+  postBuild:
+    substitute:
+      cluster_domain: ${cluster_domain}
+      helm_repo: https://code.siemens.com/api/v4/projects/502963/packages/helm/devel

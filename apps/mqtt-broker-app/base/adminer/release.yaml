@@ -1,0 +1,19 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: adminer
+  labels:
+    app.kubernetes.io/xo-managed: true
+spec:
+  releaseName: adminer
+  chart:
+    spec:
+      chart: adminer
+      version: 0.x.x
+      sourceRef:
+        kind: HelmRepository
+        name: gamesa-sample
+  interval: 5m
+  install:
+    remediation:
+      retries: 3

@@ -1,0 +1,22 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: comp-a
+  labels:
+    app.kubernetes.io/xo-managed: true
+spec:
+  releaseName: comp-a
+  chart:
+    spec:
+      chart: comp-a
+      version: 0.x.x
+      sourceRef:
+        kind: HelmRepository
+        name: gamesa-sample
+  values:
+    imagePullSecrets:
+      - name: gamesa-sample-csc-docker-readonly
+  interval: 5m
+  install:
+    remediation:
+      retries: 3

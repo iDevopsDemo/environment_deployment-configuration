@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: mqtt-broker-app-staging
+resources:
+  - namespace.yaml
+  - ../base
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/chart/spec/version
+        value: 0.x.x-0
+    target:
+      kind: HelmRelease
+      labelSelector: "app.kubernetes.io/xo-managed=true"
+patchesStrategicMerge:
+  - adminer-values.yaml
+  - comp-a-values.yaml
+  - comp-b-values.yaml
+  - comp-c-values.yaml

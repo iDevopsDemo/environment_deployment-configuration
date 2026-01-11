@@ -1,0 +1,19 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mysql
+  labels:
+    app.kubernetes.io/xo-managed: true
+spec:
+  releaseName: mysql
+  chart:
+    spec:
+      chart: mysql
+      version: 0.x.x
+      sourceRef:
+        kind: HelmRepository
+        name: gamesa-sample
+  interval: 5m
+  install:
+    remediation:
+      retries: 3

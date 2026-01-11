@@ -1,0 +1,10 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: adminer
+spec:
+  values:
+    ingress:
+      enabled: true
+      tls: false
+      host: adminer-test.${cluster_domain}

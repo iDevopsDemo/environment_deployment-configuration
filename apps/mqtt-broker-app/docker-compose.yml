@@ -1,0 +1,72 @@
+
+services:
+  mqtt-broker:
+    image: eclipse-mosquitto:2.0.14
+    ports:
+      - "1883:1883"
+    configs:
+      - source: mqtt-broker-config
+        target: /mosquitto/config/mosquitto.conf
+
+  mysql:
+    image: mysql:latest
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=myuser
+      - MYSQL_DATABASE=mqtt-broker-app
+      - MYSQL_USER=myuser
+      - MYSQL_PASSWORD=mysecret
+    ports:
+      - "3306:3306"
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8081:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=mysql
+
+  comp-a:
+    image: cr.siemens.com/ssp-self-evolving-software/hypothesis-track/components/comp-a/comp-a:latest
+    environment:
+      - QCLIENT_BROKER_HOST=mqtt-broker
+      - QCLIENT_BROKER_PORT=1883
+      - DATAPROVIDER_TOPIC=sample/message
+    depends_on:
+      - mqtt-broker
+
+  comp-b:
+    image: cr.siemens.com/ssp-self-evolving-software/hypothesis-track/components/comp-b/comp-b:latest
+    environment:
+      - DATACOLLECTOR_STORAGE=mysql
+      - QCLIENT_BROKER_HOST=mqtt-broker
+      - QCLIENT_BROKER_PORT=1883
+      - STORAGE_MYSQL_HOST=mysql
+      - STORAGE_MYSQL_PORT=3306
+      - STORAGE_MYSQL_DB=mqtt-broker-app
+      - STORAGE_MYSQL_USER=myuser
+      - STORAGE_MYSQL_PASS=mysecret
+    depends_on:
+      - mqtt-broker
+      - mysql
+
+  comp-c:
+    image: cr.siemens.com/ssp-self-evolving-software/hypothesis-track/components/comp-c/comp-c:latest
+    environment:
+      - DATACOLLECTOR_STORAGE=mysql
+      - STORAGE_MYSQL_HOST=mysql
+      - STORAGE_MYSQL_PORT=3306
+      - STORAGE_MYSQL_DB=mqtt-broker-app
+      - STORAGE_MYSQL_USER=myuser
+      - STORAGE_MYSQL_PASS=mysecret
+    ports:
+      - "8080:5000"
+    depends_on:
+      - mysql
+
+
+configs:
+  mqtt-broker-config:
+    content: |
+      per_listener_settings false
+      listener 1883
+      allow_anonymous true

@@ -1,0 +1,17 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: gamesa-sample
+spec:
+  interval: 1m
+  url: ${helm_repo}
+  secretRef:
+    name: gamesa-sample-csc-helm-readonly
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: k8s-at-home
+spec:
+  interval: 5m
+  url: https://k8s-at-home.com/charts/
